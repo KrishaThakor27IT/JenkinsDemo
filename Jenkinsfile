@@ -5,7 +5,8 @@ pipeline {
         stage('Checkout') {
             steps {
                 echo 'Checking out code from GitHub...'
-                git url: 'https://github.com/YOUR_GITHUB_USERNAME/JenkinsDemo.git', branch: 'main'
+                git url: 'https://github.com/KrishaThakor27IT/JenkinsDemo.git', credentialsId: 'github-pat', branch: 'main'
+, branch: 'main'
             }
         }
 
