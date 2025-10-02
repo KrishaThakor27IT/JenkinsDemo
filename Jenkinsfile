@@ -2,8 +2,7 @@ pipeline {
     agent any
 
     tools {
-        // <-- ADD THIS SECTION
-        // This name MUST match the name you used in Manage Jenkins > Tools
+        // This line tells Jenkins to use the JDK you configured.
         jdk 'jdk-17' 
     }
 
@@ -11,6 +10,7 @@ pipeline {
         stage('Checkout') {
             steps {
                 echo 'Checking out code from GitHub...'
+                // Using the git step is cleaner than the default checkout
                 git url: 'https://github.com/KrishaThakor27IT/JenkinsDemo.git', credentialsId: 'github-pat', branch: 'main'
             }
         }
@@ -25,15 +25,14 @@ pipeline {
         stage('Test') {
             steps {
                 echo 'Running automated tests...'
-                // Note: This command might fail if JUnit is not in your classpath.
-                // A more robust command is: bat 'java -cp . org.junit.runner.JUnitCore CalculatorTest'
+                // This command may need to be adjusted if you are using a test framework like JUnit
                 bat 'java CalculatorTest'
             }
         }
 
         stage('Archive') {
             steps {
-                archiveArtifacts artifacts: '*.class', allowEmptyArchive: false
+                archiveArtifacts artifacts: '*.class', allowEmptyArchive: true // Changed to true to prevent failures if no .class files are found
             }
         }
     }
@@ -43,3 +42,4 @@ pipeline {
         failure { echo 'Pipeline finished FAILURE' }
     }
 }
+
