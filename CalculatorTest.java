@@ -1,26 +1,25 @@
-// CalculatorTest.java
 public class CalculatorTest {
     public static void main(String[] args) {
         Calculator calc = new Calculator();
-        boolean allPassed = true;
+        boolean passed = true;
 
-        if (calc.add(2, 3) != 5) allPassed = false;
-        if (calc.subtract(5, 2) != 3) allPassed = false;
-        if (calc.multiply(2, 3) != 6) allPassed = false;
+        // Testing all operations
+        passed &= (calc.add(10, 5) == 15);
+        passed &= (calc.subtract(10, 5) == 5);
+        passed &= (calc.multiply(3, 4) == 12);
+
         try {
-            if (calc.divide(6, 2) != 3) allPassed = false;
+            passed &= (calc.divide(20, 4) == 5);
             try {
-                calc.divide(5, 0);
-                // If no exception thrown, test fails
-                allPassed = false;
-            } catch (Exception e) {
+                calc.divide(10, 0);
+                passed = false; // Should fail if no exception
+            } catch (ArithmeticException e) {
                 // expected
             }
         } catch (Exception e) {
-            allPassed = false;
+            passed = false;
         }
 
-        if (allPassed) System.out.println("All tests passed!");
-        else System.out.println("Some tests failed!");
+        System.out.println(passed ? "All tests passed!" : "Some tests failed!");
     }
 }
