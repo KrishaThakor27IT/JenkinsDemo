@@ -1,8 +1,8 @@
 pipeline {
     agent any
 
+    // THIS IS THE CRUCIAL SECTION THAT IS MISSING
     tools {
-        // This line tells Jenkins to use the JDK you configured.
         jdk 'jdk-17' 
     }
 
@@ -10,7 +10,7 @@ pipeline {
         stage('Checkout') {
             steps {
                 echo 'Checking out code from GitHub...'
-                // Using the git step is cleaner than the default checkout
+                // The 'git' step is cleaner than relying on the default checkout.
                 git url: 'https://github.com/KrishaThakor27IT/JenkinsDemo.git', credentialsId: 'github-pat', branch: 'main'
             }
         }
@@ -18,6 +18,7 @@ pipeline {
         stage('Build') {
             steps {
                 echo 'Compiling Java files...'
+                // This will now work because the tools block has set up the JDK.
                 bat 'javac Calculator.java CalculatorTest.java'
             }
         }
@@ -25,14 +26,15 @@ pipeline {
         stage('Test') {
             steps {
                 echo 'Running automated tests...'
-                // This command may need to be adjusted if you are using a test framework like JUnit
+                // Note: This simple command might not work for a real test suite.
+                // It assumes CalculatorTest has a main method.
                 bat 'java CalculatorTest'
             }
         }
 
         stage('Archive') {
             steps {
-                archiveArtifacts artifacts: '*.class', allowEmptyArchive: true // Changed to true to prevent failures if no .class files are found
+                archiveArtifacts artifacts: '*.class', allowEmptyArchive: true
             }
         }
     }
