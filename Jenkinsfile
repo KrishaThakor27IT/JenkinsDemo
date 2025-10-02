@@ -1,6 +1,12 @@
 pipeline {
     agent any
 
+    tools {
+        // <-- ADD THIS SECTION
+        // This name MUST match the name you used in Manage Jenkins > Tools
+        jdk 'jdk-17' 
+    }
+
     stages {
         stage('Checkout') {
             steps {
@@ -19,6 +25,8 @@ pipeline {
         stage('Test') {
             steps {
                 echo 'Running automated tests...'
+                // Note: This command might fail if JUnit is not in your classpath.
+                // A more robust command is: bat 'java -cp . org.junit.runner.JUnitCore CalculatorTest'
                 bat 'java CalculatorTest'
             }
         }
